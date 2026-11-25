@@ -20,3 +20,10 @@ There is nothing unnecessary. Just plain (very plain) configuration files.
 ## Environment
 
 Primarily maintained on EndeavourOS (Arch Linux).
+
+## Screenshots
+
+![Screenshot1](.github/screenshot1.png)
+
+![Screenshot2](.github/screenshot2.png)
+
