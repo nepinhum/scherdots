@@ -1,0 +1,59 @@
+configuration {
+    modi: "run,drun";
+    show-icons: false;
+    font: "monospace 12";
+}
+
+* {
+    bg: #1f1f28;
+    surface: #2a2a37;
+    fg: #dcd7ba;
+    blue: #7e9cd8;
+    selection: #2d4f67;
+
+    background-color: transparent;
+    text-color: @fg;
+}
+
+window {
+    width: 520px;
+    background-color: @bg;
+    border: 1px;
+    border-color: @blue;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+mainbox {
+    spacing: 10px;
+}
+
+inputbar {
+    background-color: @surface;
+    padding: 10px;
+    spacing: 10px;
+    children: [prompt, entry];
+}
+
+prompt {
+    text-color: @blue;
+}
+
+listview {
+    lines: 7;
+    spacing: 2px;
+    scrollbar: false;
+}
+
+element {
+    padding: 8px;
+}
+
+element selected {
+    background-color: @selection;
+    text-color: @fg;
+}
+
+element-text {
+    text-color: inherit;
+}
