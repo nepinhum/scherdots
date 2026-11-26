@@ -231,6 +231,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true,
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'), { description = "Utilities: Take screenshot" })
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"), { description = "Utilities: Clipboard history" })
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybinds.sh"), { description = "Utilities: Show keybindings" })
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/windows.sh"), { description = "Utilities: Find window" })
 
 -- Window rules
 
