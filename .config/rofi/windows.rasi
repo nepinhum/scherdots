@@ -1,0 +1,29 @@
+@import "config.rasi"
+
+window {
+    width: 950px;
+    padding: 16px;
+}
+
+mainbox {
+    spacing: 12px;
+}
+
+inputbar {
+    padding: 10px;
+}
+
+listview {
+    lines: 12;
+    spacing: 2px;
+    scrollbar: true;
+    fixed-height: false;
+}
+
+element {
+    padding: 6px 8px;
+}
+
+element-text {
+    font: "monospace 11";
+}
