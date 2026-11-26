@@ -2,7 +2,6 @@
   "layer": "top",
   "position": "top",
   "height": 30,
-
   "modules-left": [
     "hyprland/workspaces"
   ],
@@ -15,28 +14,39 @@
     "backlight",
     "battery"
   ],
-
   "clock": {
-    "format": "{:%H:%M}"
+    "format": "{:%H:%M}",
+    "on-click": "~/.config/waybar/scripts/actions.sh calendar",
+    "tooltip-format": "<tt>{calendar}</tt>"
   },
-
   "pulseaudio": {
     "format": "VOL {volume}%",
-    "format-muted": "MUTED"
+    "format-muted": "MUTED",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-right": "~/.config/waybar/scripts/actions.sh audio",
+    "scroll-step": 5,
+    "max-volume": 100
   },
-
   "battery": {
     "format": "BAT {capacity}%",
-    "format-charging": "CHG {capacity}%"
+    "format-charging": "CHG {capacity}%",
+    "on-click": "~/.config/waybar/scripts/actions.sh battery",
+    "states": {
+      "warning": 25,
+      "critical": 10
+    }
   },
-
   "backlight": {
-    "format": "LUX {percent}%"
+    "format": "LUX {percent}%",
+    "on-click": "~/.config/waybar/scripts/actions.sh brightness",
+    "on-scroll-up": "brightnessctl -c backlight set 5%+",
+    "on-scroll-down": "brightnessctl -c backlight set 5%-"
   },
-
   "network": {
     "format-wifi": "WIFI {signalStrength}%",
     "format-ethernet": "ETH",
-    "format-disconnected": "OFFLINE"
+    "format-disconnected": "OFFLINE",
+    "on-click": "~/.config/waybar/scripts/actions.sh network",
+    "on-click-right": "~/.config/waybar/scripts/actions.sh network-info"
   }
 }

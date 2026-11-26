@@ -70,3 +70,11 @@ window#waybar {
 #battery.critical {
     color: @red;
 }
+
+#clock:hover,
+#pulseaudio:hover,
+#network:hover,
+#backlight:hover,
+#battery:hover {
+    background: @surface;
+}
