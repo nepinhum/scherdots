@@ -174,14 +174,45 @@ local mainMod = "SUPER"
 -- Applications
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal), { description = "Applications: Open terminal" })
 
+local terminalPending = false
+
+hl.on("window.open", function(window)
+    if window.class == "scherdots-terminal" then
+        terminalPending = false
+    end
+end)
+
 hl.bind(mainMod .. " + SHIFT + Q", function()
     local window = hl.get_window("class:scherdots-terminal")
 
     if window then
-        hl.dispatch(hl.dsp.workspace.toggle_special("terminal"))
-    else
-        hl.exec_cmd("kitty --class scherdots-terminal")
+        terminalPending = false
+
+        if not window.workspace or window.workspace.name ~= "special:terminal" then
+            hl.dispatch(hl.dsp.window.move({
+                window = window,
+                workspace = "special:terminal",
+                follow = false,
+            }))
+
+            hl.dispatch(hl.dsp.focus({ window = window }))
+        else
+            hl.dispatch(hl.dsp.workspace.toggle_special("terminal"))
+        end
+
+        return
     end
+
+    if terminalPending then
+        return
+    end
+
+    terminalPending = true
+    hl.exec_cmd("kitty --class scherdots-terminal")
+
+    hl.timer(function()
+        terminalPending = false
+    end, { timeout = 3000, type = "oneshot" })
 end, { description = "Applications: Toggle floating terminal" })
 
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager), { description = "Applications: Open file manager" })
@@ -239,7 +270,7 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true, description = "Media: Previous track" })
 
 -- Utilities
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'), { description = "Utilities: Take screenshot" })
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd('geometry=$(slurp) && grim -g "$geometry" - | wl-copy'), { description = "Utilities: Take screenshot" })
 hl.bind(mainMod .. " + SHIFT + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy"), { description = "Utilities: Clipboard history" })
 hl.bind(mainMod .. " + K", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybinds.sh"), { description = "Utilities: Show keybindings" })
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("~/.config/hypr/scripts/windows.sh"), { description = "Utilities: Find window" })

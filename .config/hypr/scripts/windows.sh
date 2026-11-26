@@ -5,6 +5,9 @@ set -o pipefail
 config="${XDG_CONFIG_HOME:-$HOME/.config}"
 pidfile="${XDG_RUNTIME_DIR}/scherdots-windows-${HYPRLAND_INSTANCE_SIGNATURE}.pid"
 
+exec 9>"${pidfile}.lock" || exit 1
+flock -x 9 || exit 1
+
 if [[ -f "$pidfile" ]]; then
     pid=$(cat "$pidfile")
 
@@ -12,6 +15,7 @@ if [[ -f "$pidfile" ]]; then
        [[ -r "/proc/$pid/cmdline" ]] &&
        grep -zFxq "scherdots-windows" "/proc/$pid/cmdline"; then
         kill "$pid"
+        rm -f "$pidfile"
         exit 0
     fi
 
@@ -68,12 +72,14 @@ rofi -dmenu \
     -format i \
     -theme "$config/rofi/windows.rasi" \
     -window-title "scherdots-windows" \
-    <<< "$entries" > "$result" &
+    <<< "$entries" > "$result" 9>&- &
 
 pid=$!
 echo "$pid" > "$pidfile"
+flock -u 9
 
 cleanup() {
+    flock -x 9
     if [[ "$(cat "$pidfile" 2>/dev/null)" == "$pid" ]]; then
         rm -f "$pidfile"
     fi

@@ -47,7 +47,7 @@ section "DEPENDENCIES"
 
 required=(
     Hyprland hyprctl kitty waybar rofi
-    mako hyprpaper jq cliphist
+    mako hyprpaper jq cliphist flock
     wl-copy wl-paste grim slurp
 )
 
@@ -95,6 +95,14 @@ for file in "${files[@]}"; do
         fail "$file missing or unreadable"
     fi
 done
+
+if command -v jq >/dev/null 2>&1; then
+    if jq -e 'type == "object"' "$root/.config/waybar/config.jsonc" >/dev/null 2>&1; then
+        ok "Waybar JSON syntax"
+    else
+        fail "Waybar configuration is not a valid JSON object"
+    fi
+fi
 
 section "SCRIPTS"
 
@@ -194,7 +202,7 @@ if command -v hyprctl >/dev/null 2>&1 &&
         fi
     done
 
-    if pgrep -u "$UID" -f '^wl-paste --type text --watch cliphist store$' >/dev/null; then
+    if pgrep -u "$UID" -f '(^|/)wl-paste .*--watch[[:space:]]+([^[:space:]]*/)?cliphist[[:space:]]+store([[:space:]]|$)' >/dev/null; then
         ok "Clipboard watcher running"
     else
         warn "Clipboard watcher not detected"

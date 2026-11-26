@@ -40,7 +40,7 @@
     "format": "LUX {percent}%",
     "on-click": "~/.config/waybar/scripts/actions.sh brightness",
     "on-scroll-up": "brightnessctl -c backlight set 5%+",
-    "on-scroll-down": "brightnessctl -c backlight set 5%-"
+    "on-scroll-down": "brightnessctl -c backlight -n2 set 5%-"
   },
   "network": {
     "format-wifi": "WIFI {signalStrength}%",
