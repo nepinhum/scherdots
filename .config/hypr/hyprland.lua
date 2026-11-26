@@ -173,6 +173,17 @@ local mainMod = "SUPER"
 
 -- Applications
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal), { description = "Applications: Open terminal" })
+
+hl.bind(mainMod .. " + SHIFT + Q", function()
+    local window = hl.get_window("class:scherdots-terminal")
+
+    if window then
+        hl.dispatch(hl.dsp.workspace.toggle_special("terminal"))
+    else
+        hl.exec_cmd("kitty --class scherdots-terminal")
+    end
+end, { description = "Applications: Toggle floating terminal" })
+
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager), { description = "Applications: Open file manager" })
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu), { description = "Applications: Application launcher" })
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("librewolf"), { description = "Applications: Open LibreWolf" })
@@ -263,3 +274,25 @@ hl.window_rule({
     move  = "20 monitor_h-120",
     float = true,
 })
+
+
+hl.window_rule({
+    name      = "floating-terminal",
+    match     = { class = "^scherdots-terminal$" },
+    float     = true,
+    center    = true,
+    size      = "monitor_w*0.65 monitor_h*0.55",
+    workspace = "special:terminal",
+})
+
+-- Floating terminal dismissal
+hl.bind("Escape", function()
+    local window = hl.get_active_window()
+
+    if not window or window.class ~= "scherdots-terminal" then
+        return { ok = false }
+    end
+
+    hl.dispatch(hl.dsp.workspace.toggle_special("terminal"))
+    return { ok = true }
+end, { auto_consuming = true, description = "Applications: Hide floating terminal" })
